@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case Report References</title>
+
+<style>
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+        margin: 0;
+        background-color: #f5f7fa;
+        color: #1a1a1a;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: auto;
+        padding: 20px;
+    }
+
+    .header {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .header h1 {
+        font-size: 28px;
+        margin-bottom: 5px;
+    }
+
+    .header p {
+        color: #555;
+        font-size: 14px;
+    }
+
+    .reference {
+        background: white;
+        padding: 15px 18px;
+        margin-bottom: 12px;
+        border-radius: 10px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        line-height: 1.5;
+        font-size: 15px;
+    }
+
+    .ref-number {
+        font-weight: bold;
+        color: #2b6cb0;
+        margin-right: 6px;
+    }
+
+    .footer {
+        text-align: center;
+        font-size: 12px;
+        color: #777;
+        margin-top: 30px;
+    }
+
+    @media (max-width: 600px) {
+        .header h1 {
+            font-size: 22px;
+        }
+
+        .reference {
+            font-size: 14px;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>References</h1>
+        <p>Immune Checkpoint Inhibitor–Induced Hypophysitis</p>
+    </div>
+
+    <div class="reference">
+        <span class="ref-number">1.</span>
+        Natsuki S, Noda E, Iimori N, Okuno T, Kametani N, Tokumoto M, et al.
+        A case of hypophysitis due to immune checkpoint inhibitor treatment.
+        <i>Gan To Kagaku Ryoho.</i> 2020;47(13):2095-7. PMID: 33468812.
+    </div>
+
+    <div class="reference">
+        <span class="ref-number">2.</span>
+        Okigbo C, Kirk D.
+        Immune checkpoint inhibitor–induced hypophysitis in renal cell carcinoma: two contrasting case presentations.
+        <i>J Endocr Soc.</i> 2021;5(Suppl 1):A588-A589.
+        doi:10.1210/jendso/bvab048.1200.
+    </div>
+
+    <div class="reference">
+        <span class="ref-number">3.</span>
+        Jessel S, Weiss S, Austin M, Mahajan A, Etts K, et al.
+        Immune checkpoint inhibitor–induced hypophysitis and patterns of loss of pituitary function.
+        <i>Front Oncol.</i> 2022;12:836859.
+        doi:10.3389/fonc.2022.836859.
+    </div>
+
+    <div class="reference">
+        <span class="ref-number">4.</span>
+        Chandpuri RS.
+        Checkpoint inhibitor–induced hypophysitis/hypopituitarism.
+        <i>J Endocr Soc.</i> 2023;7(Suppl 1):A588-A589.
+    </div>
+
+    <div class="reference">
+        <span class="ref-number">5.</span>
+        Johnson J, Goldner W, Abdallah D, Qiu F, Ganti A, et al.
+        Hypophysitis and secondary adrenal insufficiency from immune checkpoint inhibitors:
+        diagnostic challenges and link with survival.
+        <i>J Natl Compr Canc Netw.</i> 2023;21(3):e230003.
+        doi:10.6004/jnccn.2023.7003.
+    </div>
+
+    <div class="reference">
+        <span class="ref-number">6.</span>
+        Deligiannis NG, Sosa S, Danilowicz K, Rizzo LFL.
+        Endocrine dysfunction induced by immune checkpoint inhibitors.
+        <i>Medicina (B Aires).</i> 2021;81(2):269-78.
+        PMID: 33906146.
+    </div>
+
+    <div class="reference">
+        <span class="ref-number">7.</span>
+        Mizukoshi T, Fukuoka H, Takahashi Y.
+        Immune checkpoint inhibitor–related hypophysitis.
+        <i>Best Pract Res Clin Endocrinol Metab.</i> 2022;36(3):101668.
+        doi:10.1016/j.beem.2022.101668.
+        PMID: 35562229.
+    </div>
+
+    <div class="reference">
+        <span class="ref-number">8.</span>
+        Kotwal A.
+        Hypophysitis from immune checkpoint inhibitors: challenges in diagnosis and management.
+        <i>Curr Opin Endocrinol Diabetes Obes.</i> 2021;28(4):427-34.
+        doi:10.1097/MED.0000000000000652.
+        PMID: 34183541.
+    </div>
+
+    <div class="footer">
+        Scan QR code for full reference list
+    </div>
+
+</div>
+
+</body>
+</html>
