@@ -51,14 +51,6 @@
       letter-spacing: -0.035em;
     }
 
-    .poster-subtitle {
-      margin: 0 auto 10px;
-      max-width: 680px;
-      color: var(--subtext);
-      font-size: 0.7rem;
-      line-height: 1.5;
-    }
-
     .authors {
       margin: 0 auto;
       max-width: 700px;
@@ -163,13 +155,13 @@
     }
 
     .secondary-btn {
-      background: rgba(0,0,0,0.06);
+      background: rgba(0, 0, 0, 0.06);
       color: var(--text);
       box-shadow: none;
     }
 
     .secondary-btn:hover {
-      background: rgba(0,0,0,0.10);
+      background: rgba(0, 0, 0, 0.10);
     }
 
     .danger-btn {
@@ -306,6 +298,11 @@
       margin-top: 10px;
     }
 
+    .bottom-admin {
+      text-align: center;
+      margin-top: 10px;
+    }
+
     @media (max-width: 640px) {
       .card {
         padding: 18px;
@@ -324,8 +321,13 @@
       }
 
       .comment-actions button,
-      .admin-actions button {
+      .admin-actions button,
+      .bottom-admin button {
         width: auto;
+      }
+
+      .bottom-admin button {
+        width: 100%;
       }
     }
   </style>
@@ -343,7 +345,6 @@
     <div class="card">
       <div class="top-row">
         <h2 class="section-title" style="margin:0;">Leave feedback</h2>
-        <button id="showAdminBtn" class="secondary-btn">Admin</button>
       </div>
 
       <div class="field">
@@ -356,7 +357,6 @@
         <textarea id="comment" placeholder="Write your feedback here..." maxlength="1000"></textarea>
       </div>
 
-      <!-- Honeypot for very basic bot filtering -->
       <div class="hidden-honeypot" aria-hidden="true">
         <label for="website">Website</label>
         <input id="website" type="text" tabindex="-1" autocomplete="off" />
@@ -368,6 +368,17 @@
       </div>
 
       <div id="submitStatus" class="status"></div>
+    </div>
+
+    <div class="card">
+      <div class="comments-header">
+        <h2 class="section-title" style="margin:0;">Comments</h2>
+        <div class="count" id="commentCount">0 comments</div>
+      </div>
+
+      <div id="comments">
+        <div class="empty">No comments yet. Be the first to leave feedback.</div>
+      </div>
     </div>
 
     <div class="card admin-panel" id="adminPanel">
@@ -401,15 +412,8 @@
       <div id="adminStatus" class="status"></div>
     </div>
 
-    <div class="card">
-      <div class="comments-header">
-        <h2 class="section-title" style="margin:0;">Comments</h2>
-        <div class="count" id="commentCount">0 comments</div>
-      </div>
-
-      <div id="comments">
-        <div class="empty">No comments yet. Be the first to leave feedback.</div>
-      </div>
+    <div class="bottom-admin">
+      <button id="showAdminBtn" class="secondary-btn">Admin</button>
     </div>
 
     <div class="footer-note">Thank you for viewing our poster. We’d love your comments, suggestions, and recommendations.</div>
@@ -445,15 +449,11 @@
       appId: "1:809265922675:web:e27da53d0cb411d7c6a006"
     };
 
-    // ===== Customize these =====
     const POSTER_TITLE = "Immune checkpoint inhibitor–induced hypophysitis presenting as refractory hyponatremia and hypoglycemia despite normal pituitary imaging";
-    const POSTER_SUBTITLE = "";
     const POSTER_AUTHORS = "Mohammad Sayyar, MD; Ayesha Shahzadi, MD; Saleha Khalid, MD; Hussein Alomari, MD; Menatallah Algohary, MD";
-    const ADMIN_EMAIL = "msayan92@gmail.com"; // same email you use in Firestore rules
-    // ==========================
+    const ADMIN_EMAIL = "msayan92@gmail.com";
 
     document.getElementById("posterTitle").textContent = POSTER_TITLE;
-    document.getElementById("posterSubtitle").textContent = POSTER_SUBTITLE;
     document.getElementById("posterAuthors").textContent = POSTER_AUTHORS;
 
     const app = initializeApp(firebaseConfig);
@@ -481,6 +481,7 @@
     const adminLogoutBtn = document.getElementById("adminLogoutBtn");
 
     let isAdmin = false;
+    let currentComments = [];
     const pageLoadedAt = Date.now();
 
     const profanityList = [
@@ -490,7 +491,7 @@
 
     function escapeHtml(text) {
       const div = document.createElement("div");
-      div.textContent = text;
+      div.textContent = text ?? "";
       return div.innerHTML;
     }
 
@@ -508,7 +509,7 @@
     }
 
     function normalizeText(text) {
-      return text.toLowerCase().replace(/\s+/g, " ").trim();
+      return (text || "").toLowerCase().replace(/\s+/g, " ").trim();
     }
 
     function containsProfanity(text) {
@@ -517,16 +518,16 @@
     }
 
     function tooManyLinks(text) {
-      const matches = text.match(/https?:\/\/|www\.|\.com|\.net|\.org/gi);
+      const matches = (text || "").match(/https?:\/\/|www\.|\.com|\.net|\.org/gi);
       return matches && matches.length > 1;
     }
 
     function hasSuspiciousRepetition(text) {
-      return /(.)\1{7,}/.test(text);
+      return /(.)\1{7,}/.test(text || "");
     }
 
     function isMostlyCaps(text) {
-      const letters = text.replace(/[^a-zA-Z]/g, "");
+      const letters = (text || "").replace(/[^a-zA-Z]/g, "");
       if (letters.length < 8) return false;
       const caps = letters.replace(/[^A-Z]/g, "").length;
       return caps / letters.length > 0.8;
@@ -536,7 +537,7 @@
       const key = "poster_feedback_last_submit";
       const now = Date.now();
       const last = Number(localStorage.getItem(key) || 0);
-      if (now - last < 15000) return false; // 15 sec
+      if (now - last < 15000) return false;
       localStorage.setItem(key, String(now));
       return true;
     }
@@ -593,6 +594,38 @@
       return "";
     }
 
+    function renderComments() {
+      commentCount.textContent = `${currentComments.length} comment${currentComments.length === 1 ? "" : "s"}`;
+
+      if (!currentComments.length) {
+        commentsDiv.innerHTML = `<div class="empty">No comments yet. Be the first to leave feedback.</div>`;
+        return;
+      }
+
+      commentsDiv.innerHTML = currentComments.map(({ id, data }) => {
+        const deleteButton = isAdmin
+          ? `<div class="comment-actions">
+               <button class="danger-btn small-btn" data-delete-id="${id}">Delete</button>
+             </div>`
+          : "";
+
+        return `
+          <div class="comment">
+            <div class="comment-top">
+              <div class="comment-name">${escapeHtml(data.name || "Anonymous")}</div>
+              <div class="comment-time">${formatTime(data.createdAt)}</div>
+            </div>
+            <div class="comment-text">${escapeHtml(data.comment || "")}</div>
+            ${deleteButton}
+          </div>
+        `;
+      }).join("");
+
+      document.querySelectorAll("[data-delete-id]").forEach(btn => {
+        btn.addEventListener("click", () => removeComment(btn.dataset.deleteId));
+      });
+    }
+
     async function submitComment() {
       const name = nameInput.value.trim();
       const comment = commentInput.value.trim();
@@ -613,6 +646,7 @@
           createdAt: serverTimestamp()
         });
 
+        nameInput.value = "";
         commentInput.value = "";
         setStatus(submitStatus, "Thanks — your feedback was submitted.", "success");
       } catch (error) {
@@ -688,42 +722,18 @@
         adminLoginBox.style.display = "block";
         adminSignedInBox.style.display = "none";
       }
+
+      renderComments();
     });
 
     const q = query(collection(db, "comments"), orderBy("createdAt", "desc"));
 
     onSnapshot(q, (snapshot) => {
-      const docs = snapshot.docs;
-      commentCount.textContent = `${docs.length} comment${docs.length === 1 ? "" : "s"}`;
-
-      if (!docs.length) {
-        commentsDiv.innerHTML = `<div class="empty">No comments yet. Be the first to leave feedback.</div>`;
-        return;
-      }
-
-      commentsDiv.innerHTML = docs.map((docSnap) => {
-        const data = docSnap.data();
-        const deleteButton = isAdmin
-          ? `<div class="comment-actions">
-               <button class="danger-btn small-btn" data-delete-id="${docSnap.id}">Delete</button>
-             </div>`
-          : "";
-
-        return `
-          <div class="comment">
-            <div class="comment-top">
-              <div class="comment-name">${escapeHtml(data.name || "Anonymous")}</div>
-              <div class="comment-time">${formatTime(data.createdAt)}</div>
-            </div>
-            <div class="comment-text">${escapeHtml(data.comment || "")}</div>
-            ${deleteButton}
-          </div>
-        `;
-      }).join("");
-
-      document.querySelectorAll("[data-delete-id]").forEach(btn => {
-        btn.addEventListener("click", () => removeComment(btn.dataset.deleteId));
-      });
+      currentComments = snapshot.docs.map((docSnap) => ({
+        id: docSnap.id,
+        data: docSnap.data()
+      }));
+      renderComments();
     }, (error) => {
       console.error(error);
       commentsDiv.innerHTML = `<div class="empty">Unable to load comments. Check Firestore setup.</div>`;
