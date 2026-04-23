@@ -1,60 +1,413 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Poster Feedback</title>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
+  <style>
+    :root {
+      --bg: #f5f5f7;
+      --card: rgba(255, 255, 255, 0.72);
+      --border: rgba(0, 0, 0, 0.08);
+      --text: #1d1d1f;
+      --subtext: #6e6e73;
+      --accent: #0071e3;
+      --accent-hover: #005fcc;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --radius: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+        "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, #ffffff 0%, #f5f5f7 45%, #ececf1 100%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 32px 16px 60px;
+    }
+
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.05;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .hero p {
+      margin: 0 auto;
+      max-width: 580px;
+      color: var(--subtext);
+      font-size: 1.05rem;
+      line-height: 1.5;
+    }
+
+    .card {
+      background: var(--card);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+
+    .form-card {
+      margin-bottom: 22px;
+    }
+
+    .section-title {
+      margin: 0 0 16px;
+      font-size: 1.15rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--subtext);
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 16px;
+      padding: 14px 16px;
+      font-size: 1rem;
+      color: var(--text);
+      outline: none;
+      transition: 0.2s ease;
+      font-family: inherit;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: rgba(0, 113, 227, 0.45);
+      box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.12);
+      background: #fff;
+    }
+
+    textarea {
+      min-height: 130px;
+      resize: vertical;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    button {
+      appearance: none;
+      border: none;
+      background: var(--accent);
+      color: white;
+      font-size: 0.98rem;
+      font-weight: 600;
+      padding: 12px 20px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: 0.2s ease;
+      box-shadow: 0 6px 16px rgba(0, 113, 227, 0.22);
+    }
+
+    button:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .helper {
+      color: var(--subtext);
+      font-size: 0.92rem;
+    }
+
+    .comments-card {
+      padding-top: 18px;
+    }
+
+    .comments-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .count {
+      color: var(--subtext);
+      font-size: 0.95rem;
+    }
+
+    .empty {
+      color: var(--subtext);
+      text-align: center;
+      padding: 26px 12px 18px;
+      font-size: 0.98rem;
+    }
+
+    .comment {
+      padding: 16px 0;
+      border-top: 1px solid rgba(0, 0, 0, 0.07);
+    }
+
+    .comment:first-of-type {
+      border-top: none;
+    }
+
+    .comment-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: baseline;
+      margin-bottom: 8px;
+    }
+
+    .comment-name {
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .comment-time {
+      color: var(--subtext);
+      font-size: 0.84rem;
+      white-space: nowrap;
+    }
+
+    .comment-text {
+      font-size: 1rem;
+      line-height: 1.55;
+      color: var(--text);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .footer-note {
+      text-align: center;
+      color: var(--subtext);
+      font-size: 0.88rem;
+      margin-top: 18px;
+    }
+
+    .success {
+      color: #14804a;
+      font-size: 0.93rem;
+      font-weight: 500;
+    }
+
+    .error {
+      color: #c62828;
+      font-size: 0.93rem;
+      font-weight: 500;
+    }
+
+    @media (max-width: 640px) {
+      .card {
+        padding: 18px;
+        border-radius: 20px;
+      }
+
+      .comment-top {
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .actions {
+        align-items: stretch;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
+<body>
+  <div class="container">
+    <div class="hero">
+      <h1>Poster Feedback</h1>
+      <p>
+        Thanks for taking a moment to share your thoughts, suggestions, or recommendations.
+      </p>
+    </div>
 
-<body style="font-family:sans-serif; max-width:600px; margin:auto; padding:20px;">
+    <div class="card form-card">
+      <h2 class="section-title">Leave a comment</h2>
 
-<h2>Leave Feedback</h2>
+      <div class="field">
+        <label for="name">Name</label>
+        <input id="name" type="text" placeholder="Your name (optional)" maxlength="60" />
+      </div>
 
-<input id="name" placeholder="Your name" style="width:100%; padding:10px;"><br><br>
-<textarea id="comment" placeholder="Your comment" style="width:100%; padding:10px;"></textarea><br><br>
+      <div class="field">
+        <label for="comment">Comment</label>
+        <textarea id="comment" placeholder="Write your feedback here..." maxlength="1000"></textarea>
+      </div>
 
-<button onclick="submitComment()">Submit</button>
+      <div class="actions">
+        <button id="submitBtn">Submit</button>
+        <span class="helper">Your feedback will appear below.</span>
+      </div>
 
-<hr>
+      <div id="status" style="margin-top:12px;"></div>
+    </div>
 
-<h3>Comments</h3>
-<div id="comments"></div>
+    <div class="card comments-card">
+      <div class="comments-header">
+        <h2 class="section-title" style="margin:0;">Comments</h2>
+        <div class="count" id="commentCount">0 comments</div>
+      </div>
 
-<script>
-const firebaseConfig = {
-  apiKey: "YOUR_KEY",
-  authDomain: "YOUR_DOMAIN",
-  projectId: "YOUR_PROJECT_ID"
-};
+      <div id="comments">
+        <div class="empty">No comments yet. Be the first to leave feedback.</div>
+      </div>
+    </div>
 
-const app = firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+    <div class="footer-note">
+      Built for live poster feedback
+    </div>
+  </div>
 
-function submitComment() {
-  const name = document.getElementById('name').value;
-  const comment = document.getElementById('comment').value;
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      query,
+      orderBy,
+      onSnapshot,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  if (!comment) return alert("Write something");
+    const firebaseConfig = {
+      apiKey: "AIzaSyBgO6fjoy16WHyRWhCBL1bd9_MHGN4TtEY",
+      authDomain: "poster-feedback.firebaseapp.com",
+      projectId: "poster-feedback",
+      storageBucket: "poster-feedback.firebasestorage.app",
+      messagingSenderId: "809265922675",
+      appId: "1:809265922675:web:e27da53d0cb411d7c6a006"
+    };
 
-  db.collection("comments").add({
-    name: name || "Anonymous",
-    comment: comment,
-    time: Date.now()
-  });
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-  document.getElementById('comment').value = "";
-}
+    const nameInput = document.getElementById("name");
+    const commentInput = document.getElementById("comment");
+    const submitBtn = document.getElementById("submitBtn");
+    const commentsDiv = document.getElementById("comments");
+    const commentCount = document.getElementById("commentCount");
+    const statusDiv = document.getElementById("status");
 
-db.collection("comments").orderBy("time", "desc")
-  .onSnapshot(snapshot => {
-    let html = "";
-    snapshot.forEach(doc => {
-      const d = doc.data();
-      html += `<p><b>${d.name}</b>: ${d.comment}</p>`;
+    function escapeHtml(text) {
+      const div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function formatTime(timestamp) {
+      if (!timestamp?.toDate) return "Just now";
+      return timestamp.toDate().toLocaleString([], {
+        dateStyle: "medium",
+        timeStyle: "short"
+      });
+    }
+
+    function setStatus(message, type = "") {
+      statusDiv.className = type;
+      statusDiv.textContent = message;
+    }
+
+    submitBtn.addEventListener("click", async () => {
+      const name = nameInput.value.trim() || "Anonymous";
+      const comment = commentInput.value.trim();
+
+      if (!comment) {
+        setStatus("Please enter a comment before submitting.", "error");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      setStatus("Submitting...", "");
+
+      try {
+        await addDoc(collection(db, "comments"), {
+          name,
+          comment,
+          createdAt: serverTimestamp()
+        });
+
+        commentInput.value = "";
+        setStatus("Thanks — your feedback was submitted.", "success");
+      } catch (error) {
+        console.error(error);
+        setStatus("Could not submit your comment. Check Firebase setup and rules.", "error");
+      } finally {
+        submitBtn.disabled = false;
+      }
     });
-    document.getElementById("comments").innerHTML = html;
-  });
-</script>
 
+    const q = query(collection(db, "comments"), orderBy("createdAt", "desc"));
+
+    onSnapshot(q, (snapshot) => {
+      const docs = snapshot.docs;
+      commentCount.textContent = `${docs.length} comment${docs.length === 1 ? "" : "s"}`;
+
+      if (!docs.length) {
+        commentsDiv.innerHTML = `<div class="empty">No comments yet. Be the first to leave feedback.</div>`;
+        return;
+      }
+
+      commentsDiv.innerHTML = docs.map((doc) => {
+        const data = doc.data();
+        return `
+          <div class="comment">
+            <div class="comment-top">
+              <div class="comment-name">${escapeHtml(data.name || "Anonymous")}</div>
+              <div class="comment-time">${formatTime(data.createdAt)}</div>
+            </div>
+            <div class="comment-text">${escapeHtml(data.comment || "")}</div>
+          </div>
+        `;
+      }).join("");
+    }, (error) => {
+      console.error(error);
+      commentsDiv.innerHTML = `<div class="empty">Unable to load comments. Check Firestore rules and indexes.</div>`;
+    });
+  </script>
 </body>
 </html>
