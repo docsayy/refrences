@@ -13,13 +13,14 @@
       --subtext: #6e6e73;
       --accent: #0071e3;
       --accent-hover: #005fcc;
-      --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --danger: #d92d20;
+      --danger-hover: #b42318;
+      --success: #14804a;
+      --shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
       --radius: 24px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -33,29 +34,38 @@
     }
 
     .container {
-      max-width: 760px;
+      max-width: 840px;
       margin: 0 auto;
     }
 
     .hero {
       text-align: center;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
     }
 
     .hero h1 {
       margin: 0 0 10px;
-      font-size: clamp(2rem, 4vw, 3rem);
-      line-height: 1.05;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      line-height: 1.04;
       font-weight: 700;
-      letter-spacing: -0.03em;
+      letter-spacing: -0.035em;
     }
 
-    .hero p {
-      margin: 0 auto;
-      max-width: 580px;
+    .poster-subtitle {
+      margin: 0 auto 10px;
+      max-width: 680px;
       color: var(--subtext);
-      font-size: 1.05rem;
+      font-size: 1.02rem;
       line-height: 1.5;
+    }
+
+    .authors {
+      margin: 0 auto;
+      max-width: 700px;
+      color: var(--text);
+      font-size: 0.98rem;
+      line-height: 1.5;
+      font-weight: 500;
     }
 
     .card {
@@ -68,8 +78,9 @@
       padding: 22px;
     }
 
-    .form-card {
-      margin-bottom: 22px;
+    .stack {
+      display: grid;
+      gap: 18px;
     }
 
     .section-title {
@@ -95,7 +106,7 @@
     textarea {
       width: 100%;
       border: 1px solid rgba(0, 0, 0, 0.1);
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.92);
       border-radius: 16px;
       padding: 14px 16px;
       font-size: 1rem;
@@ -117,7 +128,8 @@
       resize: vertical;
     }
 
-    .actions {
+    .actions,
+    .admin-actions {
       display: flex;
       align-items: center;
       gap: 12px;
@@ -145,31 +157,53 @@
     }
 
     button:disabled {
-      opacity: 0.6;
+      opacity: 0.65;
       cursor: not-allowed;
       transform: none;
     }
 
-    .helper {
+    .secondary-btn {
+      background: rgba(0,0,0,0.06);
+      color: var(--text);
+      box-shadow: none;
+    }
+
+    .secondary-btn:hover {
+      background: rgba(0,0,0,0.10);
+    }
+
+    .danger-btn {
+      background: var(--danger);
+      box-shadow: 0 6px 16px rgba(217, 45, 32, 0.18);
+    }
+
+    .danger-btn:hover {
+      background: var(--danger-hover);
+    }
+
+    .helper,
+    .footer-note,
+    .count {
       color: var(--subtext);
       font-size: 0.92rem;
     }
 
-    .comments-card {
-      padding-top: 18px;
+    .status {
+      margin-top: 12px;
+      font-size: 0.93rem;
+      font-weight: 500;
+      min-height: 1.2em;
     }
+
+    .success { color: var(--success); }
+    .error { color: var(--danger); }
 
     .comments-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 12px;
-      margin-bottom: 10px;
-    }
-
-    .count {
-      color: var(--subtext);
-      font-size: 0.95rem;
+      margin-bottom: 8px;
     }
 
     .empty {
@@ -210,29 +244,66 @@
 
     .comment-text {
       font-size: 1rem;
-      line-height: 1.55;
+      line-height: 1.58;
       color: var(--text);
       white-space: pre-wrap;
       word-break: break-word;
     }
 
+    .comment-actions {
+      margin-top: 10px;
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .small-btn {
+      padding: 8px 12px;
+      font-size: 0.86rem;
+      border-radius: 999px;
+    }
+
+    .admin-panel {
+      display: none;
+    }
+
+    .admin-panel.visible {
+      display: block;
+    }
+
+    .admin-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(20, 128, 74, 0.10);
+      color: var(--success);
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .hidden-honeypot {
+      position: absolute;
+      left: -9999px;
+      opacity: 0;
+      pointer-events: none;
+      height: 0;
+      width: 0;
+    }
+
     .footer-note {
       text-align: center;
-      color: var(--subtext);
-      font-size: 0.88rem;
-      margin-top: 18px;
-    }
-
-    .success {
-      color: #14804a;
-      font-size: 0.93rem;
-      font-weight: 500;
-    }
-
-    .error {
-      color: #c62828;
-      font-size: 0.93rem;
-      font-weight: 500;
+      margin-top: 10px;
     }
 
     @media (max-width: 640px) {
@@ -241,36 +312,46 @@
         border-radius: 20px;
       }
 
-      .comment-top {
+      .comment-top,
+      .top-row,
+      .comments-header {
         flex-direction: column;
-        gap: 4px;
-      }
-
-      .actions {
-        align-items: stretch;
+        align-items: flex-start;
       }
 
       button {
         width: 100%;
       }
+
+      .comment-actions button,
+      .admin-actions button {
+        width: auto;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="container stack">
+
     <div class="hero">
-      <h1>Poster Feedback</h1>
-      <p>
-        Thanks for taking a moment to share your thoughts, suggestions, or recommendations.
+      <h1 id="posterTitle">Your Poster Title Goes Here</h1>
+      <p class="poster-subtitle" id="posterSubtitle">
+        Thank you for viewing our poster. We’d love your comments, suggestions, and recommendations.
+      </p>
+      <p class="authors" id="posterAuthors">
+        First Author, Second Author, Third Author
       </p>
     </div>
 
-    <div class="card form-card">
-      <h2 class="section-title">Leave a comment</h2>
+    <div class="card">
+      <div class="top-row">
+        <h2 class="section-title" style="margin:0;">Leave feedback</h2>
+        <button id="showAdminBtn" class="secondary-btn">Admin</button>
+      </div>
 
       <div class="field">
         <label for="name">Name</label>
-        <input id="name" type="text" placeholder="Your name (optional)" maxlength="60" />
+        <input id="name" type="text" placeholder="Your name" maxlength="60" />
       </div>
 
       <div class="field">
@@ -278,15 +359,52 @@
         <textarea id="comment" placeholder="Write your feedback here..." maxlength="1000"></textarea>
       </div>
 
-      <div class="actions">
-        <button id="submitBtn">Submit</button>
-        <span class="helper">Your feedback will appear below.</span>
+      <!-- Honeypot for very basic bot filtering -->
+      <div class="hidden-honeypot" aria-hidden="true">
+        <label for="website">Website</label>
+        <input id="website" type="text" tabindex="-1" autocomplete="off" />
       </div>
 
-      <div id="status" style="margin-top:12px;"></div>
+      <div class="actions">
+        <button id="submitBtn">Submit</button>
+        <span class="helper">Your feedback will appear below after submission.</span>
+      </div>
+
+      <div id="submitStatus" class="status"></div>
     </div>
 
-    <div class="card comments-card">
+    <div class="card admin-panel" id="adminPanel">
+      <div class="top-row">
+        <h2 class="section-title" style="margin:0;">Admin controls</h2>
+        <div id="adminState"></div>
+      </div>
+
+      <div id="adminLoginBox">
+        <div class="field">
+          <label for="adminEmail">Admin email</label>
+          <input id="adminEmail" type="email" placeholder="you@example.com" />
+        </div>
+
+        <div class="field">
+          <label for="adminPassword">Password</label>
+          <input id="adminPassword" type="password" placeholder="Password" />
+        </div>
+
+        <div class="admin-actions">
+          <button id="adminLoginBtn">Sign in</button>
+        </div>
+      </div>
+
+      <div id="adminSignedInBox" style="display:none;">
+        <div class="admin-actions">
+          <button id="adminLogoutBtn" class="secondary-btn">Sign out</button>
+        </div>
+      </div>
+
+      <div id="adminStatus" class="status"></div>
+    </div>
+
+    <div class="card">
       <div class="comments-header">
         <h2 class="section-title" style="margin:0;">Comments</h2>
         <div class="count" id="commentCount">0 comments</div>
@@ -297,9 +415,7 @@
       </div>
     </div>
 
-    <div class="footer-note">
-      Built for live poster feedback
-    </div>
+    <div class="footer-note">Live poster feedback</div>
   </div>
 
   <script type="module">
@@ -308,11 +424,20 @@
       getFirestore,
       collection,
       addDoc,
+      deleteDoc,
+      doc,
       query,
       orderBy,
       onSnapshot,
       serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signInWithEmailAndPassword,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBgO6fjoy16WHyRWhCBL1bd9_MHGN4TtEY",
@@ -323,20 +448,58 @@
       appId: "1:809265922675:web:e27da53d0cb411d7c6a006"
     };
 
+    // ===== Customize these =====
+    const POSTER_TITLE = "Your Poster Title Goes Here";
+    const POSTER_SUBTITLE = "Thank you for viewing our poster. We’d love your comments, suggestions, and recommendations.";
+    const POSTER_AUTHORS = "First Author, Second Author, Third Author";
+    const ADMIN_EMAIL = "your@email.com"; // same email you use in Firestore rules
+    // ==========================
+
+    document.getElementById("posterTitle").textContent = POSTER_TITLE;
+    document.getElementById("posterSubtitle").textContent = POSTER_SUBTITLE;
+    document.getElementById("posterAuthors").textContent = POSTER_AUTHORS;
+
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+    const auth = getAuth(app);
 
     const nameInput = document.getElementById("name");
     const commentInput = document.getElementById("comment");
+    const websiteInput = document.getElementById("website");
     const submitBtn = document.getElementById("submitBtn");
+    const submitStatus = document.getElementById("submitStatus");
+
     const commentsDiv = document.getElementById("comments");
     const commentCount = document.getElementById("commentCount");
-    const statusDiv = document.getElementById("status");
+
+    const showAdminBtn = document.getElementById("showAdminBtn");
+    const adminPanel = document.getElementById("adminPanel");
+    const adminState = document.getElementById("adminState");
+    const adminStatus = document.getElementById("adminStatus");
+    const adminLoginBox = document.getElementById("adminLoginBox");
+    const adminSignedInBox = document.getElementById("adminSignedInBox");
+    const adminEmailInput = document.getElementById("adminEmail");
+    const adminPasswordInput = document.getElementById("adminPassword");
+    const adminLoginBtn = document.getElementById("adminLoginBtn");
+    const adminLogoutBtn = document.getElementById("adminLogoutBtn");
+
+    let isAdmin = false;
+    const pageLoadedAt = Date.now();
+
+    const profanityList = [
+      "fuck", "shit", "bitch", "asshole", "bastard", "damn",
+      "fucking", "motherfucker", "dick", "cunt"
+    ];
 
     function escapeHtml(text) {
       const div = document.createElement("div");
       div.textContent = text;
       return div.innerHTML;
+    }
+
+    function setStatus(el, message, type = "") {
+      el.className = `status ${type}`;
+      el.textContent = message;
     }
 
     function formatTime(timestamp) {
@@ -347,22 +510,104 @@
       });
     }
 
-    function setStatus(message, type = "") {
-      statusDiv.className = type;
-      statusDiv.textContent = message;
+    function normalizeText(text) {
+      return text.toLowerCase().replace(/\s+/g, " ").trim();
     }
 
-    submitBtn.addEventListener("click", async () => {
-      const name = nameInput.value.trim() || "Anonymous";
+    function containsProfanity(text) {
+      const normalized = normalizeText(text);
+      return profanityList.some(word => normalized.includes(word));
+    }
+
+    function tooManyLinks(text) {
+      const matches = text.match(/https?:\/\/|www\.|\.com|\.net|\.org/gi);
+      return matches && matches.length > 1;
+    }
+
+    function hasSuspiciousRepetition(text) {
+      return /(.)\1{7,}/.test(text);
+    }
+
+    function isMostlyCaps(text) {
+      const letters = text.replace(/[^a-zA-Z]/g, "");
+      if (letters.length < 8) return false;
+      const caps = letters.replace(/[^A-Z]/g, "").length;
+      return caps / letters.length > 0.8;
+    }
+
+    function localRateLimitOkay() {
+      const key = "poster_feedback_last_submit";
+      const now = Date.now();
+      const last = Number(localStorage.getItem(key) || 0);
+      if (now - last < 15000) return false; // 15 sec
+      localStorage.setItem(key, String(now));
+      return true;
+    }
+
+    function validateComment(name, comment) {
+      if (websiteInput.value.trim() !== "") {
+        return "Submission blocked.";
+      }
+
+      if (Date.now() - pageLoadedAt < 2500) {
+        return "Please wait a moment before submitting.";
+      }
+
+      if (!name.trim()) {
+        return "Please enter your name.";
+      }
+
+      if (!comment.trim()) {
+        return "Please enter a comment.";
+      }
+
+      if (name.trim().length > 60) {
+        return "Name is too long.";
+      }
+
+      if (comment.trim().length < 3) {
+        return "Comment is too short.";
+      }
+
+      if (comment.trim().length > 1000) {
+        return "Comment is too long.";
+      }
+
+      if (containsProfanity(comment) || containsProfanity(name)) {
+        return "Please remove inappropriate language and try again.";
+      }
+
+      if (tooManyLinks(comment)) {
+        return "Please remove promotional links.";
+      }
+
+      if (hasSuspiciousRepetition(comment)) {
+        return "Your comment looks like spam. Please revise it.";
+      }
+
+      if (isMostlyCaps(comment)) {
+        return "Please avoid all-caps comments.";
+      }
+
+      if (!localRateLimitOkay()) {
+        return "Please wait a few seconds before submitting again.";
+      }
+
+      return "";
+    }
+
+    async function submitComment() {
+      const name = nameInput.value.trim();
       const comment = commentInput.value.trim();
 
-      if (!comment) {
-        setStatus("Please enter a comment before submitting.", "error");
+      const validationError = validateComment(name, comment);
+      if (validationError) {
+        setStatus(submitStatus, validationError, "error");
         return;
       }
 
       submitBtn.disabled = true;
-      setStatus("Submitting...", "");
+      setStatus(submitStatus, "Submitting...", "");
 
       try {
         await addDoc(collection(db, "comments"), {
@@ -372,12 +617,79 @@
         });
 
         commentInput.value = "";
-        setStatus("Thanks — your feedback was submitted.", "success");
+        setStatus(submitStatus, "Thanks — your feedback was submitted.", "success");
       } catch (error) {
         console.error(error);
-        setStatus("Could not submit your comment. Check Firebase setup and rules.", "error");
+        setStatus(submitStatus, "Could not submit comment. Check Firebase rules.", "error");
       } finally {
         submitBtn.disabled = false;
+      }
+    }
+
+    async function removeComment(id) {
+      const confirmed = window.confirm("Delete this comment?");
+      if (!confirmed) return;
+
+      try {
+        await deleteDoc(doc(db, "comments", id));
+      } catch (error) {
+        console.error(error);
+        setStatus(adminStatus, "Delete failed. Check admin auth and Firestore rules.", "error");
+      }
+    }
+
+    submitBtn.addEventListener("click", submitComment);
+
+    commentInput.addEventListener("keydown", (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+        submitComment();
+      }
+    });
+
+    showAdminBtn.addEventListener("click", () => {
+      adminPanel.classList.toggle("visible");
+    });
+
+    adminLoginBtn.addEventListener("click", async () => {
+      const email = adminEmailInput.value.trim();
+      const password = adminPasswordInput.value;
+
+      if (!email || !password) {
+        setStatus(adminStatus, "Enter admin email and password.", "error");
+        return;
+      }
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        setStatus(adminStatus, "Signed in.", "success");
+        adminPasswordInput.value = "";
+      } catch (error) {
+        console.error(error);
+        setStatus(adminStatus, "Sign-in failed.", "error");
+      }
+    });
+
+    adminLogoutBtn.addEventListener("click", async () => {
+      try {
+        await signOut(auth);
+        setStatus(adminStatus, "Signed out.", "success");
+      } catch (error) {
+        console.error(error);
+        setStatus(adminStatus, "Sign-out failed.", "error");
+      }
+    });
+
+    onAuthStateChanged(auth, (user) => {
+      isAdmin = !!(user && user.email && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase());
+
+      if (isAdmin) {
+        adminState.innerHTML = `<span class="admin-badge">Admin signed in</span>`;
+        adminLoginBox.style.display = "none";
+        adminSignedInBox.style.display = "block";
+      } else {
+        adminState.innerHTML = "";
+        adminLoginBox.style.display = "block";
+        adminSignedInBox.style.display = "none";
       }
     });
 
@@ -392,8 +704,14 @@
         return;
       }
 
-      commentsDiv.innerHTML = docs.map((doc) => {
-        const data = doc.data();
+      commentsDiv.innerHTML = docs.map((docSnap) => {
+        const data = docSnap.data();
+        const deleteButton = isAdmin
+          ? `<div class="comment-actions">
+               <button class="danger-btn small-btn" data-delete-id="${docSnap.id}">Delete</button>
+             </div>`
+          : "";
+
         return `
           <div class="comment">
             <div class="comment-top">
@@ -401,12 +719,17 @@
               <div class="comment-time">${formatTime(data.createdAt)}</div>
             </div>
             <div class="comment-text">${escapeHtml(data.comment || "")}</div>
+            ${deleteButton}
           </div>
         `;
       }).join("");
+
+      document.querySelectorAll("[data-delete-id]").forEach(btn => {
+        btn.addEventListener("click", () => removeComment(btn.dataset.deleteId));
+      });
     }, (error) => {
       console.error(error);
-      commentsDiv.innerHTML = `<div class="empty">Unable to load comments. Check Firestore rules and indexes.</div>`;
+      commentsDiv.innerHTML = `<div class="empty">Unable to load comments. Check Firestore setup.</div>`;
     });
   </script>
 </body>
