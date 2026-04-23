@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Poster Feedback</title>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
+</head>
+
+<body style="font-family:sans-serif; max-width:600px; margin:auto; padding:20px;">
+
+<h2>Leave Feedback</h2>
+
+<input id="name" placeholder="Your name" style="width:100%; padding:10px;"><br><br>
+<textarea id="comment" placeholder="Your comment" style="width:100%; padding:10px;"></textarea><br><br>
+
+<button onclick="submitComment()">Submit</button>
+
+<hr>
+
+<h3>Comments</h3>
+<div id="comments"></div>
+
+<script>
+const firebaseConfig = {
+  apiKey: "YOUR_KEY",
+  authDomain: "YOUR_DOMAIN",
+  projectId: "YOUR_PROJECT_ID"
+};
+
+const app = firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+function submitComment() {
+  const name = document.getElementById('name').value;
+  const comment = document.getElementById('comment').value;
+
+  if (!comment) return alert("Write something");
+
+  db.collection("comments").add({
+    name: name || "Anonymous",
+    comment: comment,
+    time: Date.now()
+  });
+
+  document.getElementById('comment').value = "";
+}
+
+db.collection("comments").orderBy("time", "desc")
+  .onSnapshot(snapshot => {
+    let html = "";
+    snapshot.forEach(doc => {
+      const d = doc.data();
+      html += `<p><b>${d.name}</b>: ${d.comment}</p>`;
+    });
+    document.getElementById("comments").innerHTML = html;
+  });
+</script>
+
+</body>
+</html>
